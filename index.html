@@ -496,24 +496,30 @@
         }
 
         function renderAreaProblem({ target, refs, shape, options }) {
-            const allAreas = [target, ...refs];
-            let maxDimension = 0;
-            allAreas.forEach(area => {
+            // 문제 도형과 참고 도형을 각 영역 기준으로 독립적으로 크기 계산
+            const PROBLEM_H = 256; // h-64 = 256px
+            const REF_H     = 192; // h-48 = 192px
+
+            // 문제 도형: target 하나만 문제 영역에 꼭 맞게
+            const targetDims = (shape === 'square')
+                ? [Math.sqrt(target), Math.sqrt(target)]
+                : findFactors(target);
+            const targetMaxDim = Math.max(targetDims[0], targetDims[1]);
+            const problemScale = targetMaxDim > 0 ? (PROBLEM_H - 60) / targetMaxDim : 1;
+
+            // 참고 도형: refs 중 가장 큰 것 기준으로 참고 영역에 맞게
+            let refMaxDim = 0;
+            refs.forEach(area => {
                 const dims = (shape === 'square')
                     ? [Math.sqrt(area), Math.sqrt(area)]
                     : findFactors(area);
-                maxDimension = Math.max(maxDimension, dims[0], dims[1]);
+                refMaxDim = Math.max(refMaxDim, dims[0], dims[1]);
             });
+            const refScale = refMaxDim > 0 ? (REF_H - 40) / refMaxDim : 1;
 
-            const problemHeight   = problemDisplay.clientHeight;
-            const referenceHeight = referenceDisplay.clientHeight;
-            const scaleForProblem   = problemHeight   > 40 && maxDimension > 0 ? (problemHeight   - 40) / maxDimension : 1;
-            const scaleForReference = referenceHeight > 40 && maxDimension > 0 ? (referenceHeight - 40) / maxDimension : 1;
-            const scale = Math.min(scaleForProblem, scaleForReference);
-
-            problemDisplay.innerHTML = createAreaShape(target, scale, true, shape);
+            problemDisplay.innerHTML = createAreaShape(target, problemScale, true, shape);
             referenceDisplay.className = 'relative flex justify-center items-center gap-4 h-48 mb-4 p-2 bg-gray-50 rounded-lg border';
-            referenceDisplay.innerHTML = refs.map(ref => createAreaShape(ref, scale, false, shape)).join('');
+            referenceDisplay.innerHTML = refs.map(ref => createAreaShape(ref, refScale, false, shape)).join('');
 
             multipleChoiceOptions.innerHTML = '';
             if (options) {
