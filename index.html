@@ -21,21 +21,21 @@
         .feedback-correct { animation: pulse-green 1s; }
         .feedback-wrong { animation: shake 0.5s; }
         @keyframes pulse-green {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 10px 20px rgba(74, 222, 128, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+            0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+            70%  { transform: scale(1.05); box-shadow: 0 0 10px 20px rgba(74, 222, 128, 0); }
+            100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
         }
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
-            20%, 40%, 60%, 80% { transform: translateX(10px); }
+            0%, 100%                        { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90%         { transform: translateX(-10px); }
+            20%, 40%, 60%, 80%              { transform: translateX(10px); }
         }
         @keyframes fly-by-slow {
-            0% { transform: translateX(-150%); }
+            0%   { transform: translateX(-150%); }
             100% { transform: translateX(250%); }
         }
         @keyframes fly-by-fast {
-            0% { transform: translateX(-150%); }
+            0%   { transform: translateX(-150%); }
             100% { transform: translateX(250%); }
         }
         .flying-object {
@@ -44,26 +44,28 @@
             position: absolute;
         }
         /* Stage Backgrounds */
-        .bg-stage-1 { background-color: #e0f2fe; } /* light blue */
-        .bg-stage-2 { background-color: #ecfdf5; } /* light green */
-        .bg-stage-3 { background-color: #fefce8; } /* light yellow */
-        .bg-stage-bonus { background-image: linear-gradient(to top, #ffdde1, #ee9ca7); } /* pink gradient */
+        .bg-stage-1     { background-color: #e0f2fe; }
+        .bg-stage-2     { background-color: #ecfdf5; }
+        .bg-stage-3     { background-color: #fefce8; }
+        .bg-stage-bonus { background-image: linear-gradient(to top, #ffdde1, #ee9ca7); }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
     <div class="w-full max-w-2xl mx-auto p-4 md:p-6">
-        
+
+        <!-- 메인 메뉴 -->
         <div id="menu-screen" class="text-center bg-white p-8 rounded-xl shadow-lg">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">수학 양감 어림 게임</h1>
             <p class="text-gray-600 mb-8">참고 크기를 보고 정답을 추측해보세요!</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <button data-mode="length" class="game-mode-btn bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">📏 길이 어림하기</button>
-                <button data-mode="angle" class="game-mode-btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">∠ 각도 어림하기</button>
-                <button data-mode="area" class="game-mode-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">📐 넓이 어림하기</button>
+                <button data-mode="angle"  class="game-mode-btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">∠ 각도 어림하기</button>
+                <button data-mode="area"   class="game-mode-btn bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">📐 넓이 어림하기</button>
             </div>
         </div>
 
+        <!-- 게임 화면 -->
         <div id="game-screen" class="hidden">
             <div class="bg-white p-6 rounded-xl shadow-lg">
                 <div class="flex justify-between items-center mb-4">
@@ -71,39 +73,65 @@
                     <div id="progress-indicator" class="text-lg font-bold text-gray-600"></div>
                     <button id="back-to-menu" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded-lg">처음으로</button>
                 </div>
-                
-                <div id="problem-display" class="relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex items-center justify-center gap-4 p-4 overflow-hidden"></div>
+
+                <div id="problem-display"   class="relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex items-center justify-center gap-4 p-4 overflow-hidden"></div>
                 <div id="reference-display" class="relative overflow-hidden flex justify-center items-end gap-4 h-48 mb-4 p-2 bg-gray-50 rounded-lg border"></div>
 
                 <div class="mt-6">
+                    <!-- 답 입력 영역 -->
                     <div id="answer-section">
                         <p class="text-center text-lg text-gray-700 mb-2">물음표(?)의 값은 얼마일까요?</p>
                         <div id="live-feedback" class="text-center h-12">
-                            <p id="feedback-hint" class="text-xl font-bold"></p>
-                            <p id="chances-left" class="text-gray-600"></p>
+                            <p id="feedback-hint"  class="text-xl font-bold"></p>
+                            <p id="chances-left"   class="text-gray-600"></p>
                         </div>
                         <div id="input-answer-area" class="flex items-center justify-center gap-2">
-                            <input type="number" id="guess-input" class="text-center text-xl font-bold border-2 border-gray-300 rounded-lg w-32 p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="숫자 입력">
+                            <input type="number" id="guess-input"
+                                class="text-center text-xl font-bold border-2 border-gray-300 rounded-lg w-32 p-2 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                placeholder="숫자 입력">
                             <span id="unit-label" class="text-xl font-bold text-gray-600">cm</span>
                             <button id="submit-guess" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg transition-transform transform hover:scale-105">확인</button>
                         </div>
                         <div id="multiple-choice-options" class="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-4"></div>
                     </div>
+
+                    <!-- 결과 영역 -->
                     <div id="result-section" class="hidden text-center">
-                        <p id="feedback-message" class="text-xl font-bold mb-2"></p>
-                        <p id="correct-answer" class="text-gray-600 mb-4"></p>
+                        <p id="feedback-message"  class="text-xl font-bold mb-2"></p>
+                        <p id="correct-answer"    class="text-gray-600 mb-4"></p>
                         <button id="next-problem" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-8 rounded-lg transition-transform transform hover:scale-105">다음 문제</button>
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- 종료 화면 -->
         <div id="end-screen" class="hidden text-center bg-white p-8 rounded-xl shadow-lg">
-             <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">🎉 게임 종료! 🎉</h1>
-             <p id="final-score" class="text-2xl text-gray-600 mb-8"></p>
-             <button id="play-again-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">다시하기</button>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">🎉 게임 종료! 🎉</h1>
+            <p id="final-grade"   class="text-4xl mb-1"></p>
+            <p id="final-score"   class="text-2xl font-bold text-indigo-600 mb-1"></p>
+            <p id="final-correct" class="text-lg text-gray-500 mb-6"></p>
+
+            <!-- 증거 다운로드 안내 -->
+            <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 text-left">
+                <p class="font-bold text-indigo-700 mb-1">📋 점수 제출 방법</p>
+                <p class="text-sm text-indigo-600">① 아래 버튼으로 <strong>증거 JPG</strong>를 다운로드하세요.</p>
+                <p class="text-sm text-indigo-600">② 다운로드된 JPG를 선생님께 <strong>업로드·제출</strong>하면 점수를 받을 수 있어요!</p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button id="download-cert-btn"
+                    class="bg-green-500 hover:bg-green-600 active:scale-95 text-white font-bold py-3 px-6 rounded-lg transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+                    📥 증거 JPG 다운로드
+                </button>
+                <button id="play-again-btn"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105">
+                    다시하기
+                </button>
+            </div>
         </div>
 
+        <!-- 모달 (각도 타이머용) -->
         <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
             <div class="bg-white p-8 rounded-lg shadow-xl text-center">
                 <p id="modal-message" class="text-2xl font-bold text-gray-800"></p>
@@ -112,23 +140,62 @@
     </div>
 
     <script type="module">
-        const menuScreen = document.getElementById('menu-screen'), gameScreen = document.getElementById('game-screen'), endScreen = document.getElementById('end-screen'), gameTitle = document.getElementById('game-title'), progressIndicator = document.getElementById('progress-indicator'), problemDisplay = document.getElementById('problem-display'), referenceDisplay = document.getElementById('reference-display'), guessInput = document.getElementById('guess-input'), unitLabel = document.getElementById('unit-label'), submitGuessBtn = document.getElementById('submit-guess'), feedbackMessage = document.getElementById('feedback-message'), correctAnswerEl = document.getElementById('correct-answer'), nextProblemBtn = document.getElementById('next-problem'), answerSection = document.getElementById('answer-section'), resultSection = document.getElementById('result-section'), feedbackHint = document.getElementById('feedback-hint'), chancesLeft = document.getElementById('chances-left'), finalScoreEl = document.getElementById('final-score'), playAgainBtn = document.getElementById('play-again-btn'), body = document.body, modal = document.getElementById('modal'), modalMessage = document.getElementById('modal-message'), inputAnswerArea = document.getElementById('input-answer-area'), multipleChoiceOptions = document.getElementById('multiple-choice-options');
-        
-        let currentMode = '', correctAnswer = 0, remainingChances = 3, currentQuestionNumber = 1, totalQuestions = 10, score = 0;
+        // ─── DOM 참조 ─────────────────────────────────────────────────────────────
+        const menuScreen          = document.getElementById('menu-screen');
+        const gameScreen          = document.getElementById('game-screen');
+        const endScreen           = document.getElementById('end-screen');
+        const gameTitle           = document.getElementById('game-title');
+        const progressIndicator   = document.getElementById('progress-indicator');
+        const problemDisplay      = document.getElementById('problem-display');
+        const referenceDisplay    = document.getElementById('reference-display');
+        const guessInput          = document.getElementById('guess-input');
+        const unitLabel           = document.getElementById('unit-label');
+        const submitGuessBtn      = document.getElementById('submit-guess');
+        const feedbackMessage     = document.getElementById('feedback-message');
+        const correctAnswerEl     = document.getElementById('correct-answer');
+        const nextProblemBtn      = document.getElementById('next-problem');
+        const answerSection       = document.getElementById('answer-section');
+        const resultSection       = document.getElementById('result-section');
+        const feedbackHint        = document.getElementById('feedback-hint');
+        const chancesLeft         = document.getElementById('chances-left');
+        const finalScoreEl        = document.getElementById('final-score');
+        const finalCorrectEl      = document.getElementById('final-correct');
+        const playAgainBtn        = document.getElementById('play-again-btn');
+        const body                = document.body;
+        const modal               = document.getElementById('modal');
+        const modalMessage        = document.getElementById('modal-message');
+        const inputAnswerArea     = document.getElementById('input-answer-area');
+        const multipleChoiceOptions = document.getElementById('multiple-choice-options');
 
+        // ─── 게임 상태 ────────────────────────────────────────────────────────────
+        // [FIX #8] remainingChances를 startGame에서도 명시적으로 초기화
+        let currentMode = '', correctAnswer = 0;
+        let remainingChances = 3, currentQuestionNumber = 1;
+        let totalQuestions = 10;
+        let score = 0;        // 부분 점수 합계 (최대 30점)
+        let correctCount = 0; // 맞힌 문제 수
+
+        // ─── 게임 시작 ────────────────────────────────────────────────────────────
         function startGame(mode) {
-            currentMode = mode; currentQuestionNumber = 1; score = 0;
-            menuScreen.classList.add('hidden'); endScreen.classList.add('hidden'); gameScreen.classList.remove('hidden');
+            currentMode = mode;
+            currentQuestionNumber = 1;
+            score = 0;
+            correctCount = 0;
+            remainingChances = 3; // [FIX #8] 명시적 초기화
+
+            menuScreen.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
 
             const modeDetails = {
                 length: { title: '📏 길이 어림하기', unit: 'cm' },
-                angle: { title: '∠ 각도 어림하기', unit: '°' },
-                area: { title: '📐 넓이 어림하기', unit: 'cm²' },
+                angle:  { title: '∠ 각도 어림하기',  unit: '°' },
+                area:   { title: '📐 넓이 어림하기',  unit: 'cm²' },
             };
-            gameTitle.textContent = modeDetails[mode].title;
-            unitLabel.textContent = modeDetails[mode].unit;
-            
-            // This initial setup will be overridden by render functions if needed.
+            gameTitle.textContent  = modeDetails[mode].title;
+            unitLabel.textContent  = modeDetails[mode].unit;
+
+            // 각도 모드는 항상 객관식
             if (mode === 'angle') {
                 inputAnswerArea.classList.add('hidden');
                 multipleChoiceOptions.classList.remove('hidden');
@@ -139,120 +206,285 @@
             loadNextProblem();
         }
 
+        // ─── 문제 로드 ────────────────────────────────────────────────────────────
         function loadNextProblem() {
             if (currentQuestionNumber > totalQuestions) { showEndScreen(); return; }
+
             updateBackground();
             progressIndicator.textContent = `문제 ${currentQuestionNumber} / ${totalQuestions}`;
             remainingChances = 3;
             resultSection.classList.add('hidden');
             answerSection.classList.remove('hidden');
             guessInput.value = '';
-            feedbackHint.textContent = '';
-            chancesLeft.textContent = '';
+            feedbackHint.textContent  = '';
+            chancesLeft.textContent   = '';
             feedbackMessage.className = 'text-xl font-bold mb-2';
 
-            const problem = {
-                length: generateLengthProblem,
-                angle: generateAngleProblem,
-                area: generateAreaProblem,
-            }[currentMode]();
+            const generators = { length: generateLengthProblem, angle: generateAngleProblem, area: generateAreaProblem };
+            const renderers  = { length: renderLengthProblem,   angle: renderAngleProblem,  area: renderAreaProblem  };
 
-            const renderer = {
-                length: renderLengthProblem,
-                angle: renderAngleProblem,
-                area: renderAreaProblem,
-            }[currentMode];
-            
-            renderer(problem);
-            if(guessInput.offsetParent !== null) guessInput.focus();
+            const problem = generators[currentMode]();
+            renderers[currentMode](problem);
+
+            if (guessInput.offsetParent !== null) guessInput.focus();
         }
 
-        function updateBackground() { /* ... no change ... */ }
+        // ─── 배경 업데이트 ────────────────────────────────────────────────────────
+        function updateBackground() {
+            body.classList.remove('bg-stage-1', 'bg-stage-2', 'bg-stage-3', 'bg-stage-bonus', 'bg-gray-100');
+            if (currentMode !== 'length') { body.classList.add('bg-gray-100'); return; }
+            if      (currentQuestionNumber <= 3)  body.classList.add('bg-stage-1');
+            else if (currentQuestionNumber <= 6)  body.classList.add('bg-stage-2');
+            else if (currentQuestionNumber <= 9)  body.classList.add('bg-stage-3');
+            else if (currentQuestionNumber === 10) body.classList.add('bg-stage-bonus');
+        }
 
-        // --- Length Mode ---
-        function generateLengthProblem() { /* ... no change ... */ return { target: 0, refs: [] }; }
-        function renderLengthProblem({ target, refs }) { /* ... no change ... */ }
-        function renderLengthStage1({ target, refs, maxValue }) { /* ... no change ... */ }
-        function renderLengthStage2({ refs, scale }) { /* ... no change ... */ }
-        function renderLengthStage3({ refs, scale }, isBonus) { /* ... no change ... */ }
+        // ═══════════════════════════════════════════════════════════════════════════
+        // 📏 길이 모드
+        // ═══════════════════════════════════════════════════════════════════════════
 
-        // --- Angle Mode ---
-        function generateAngleProblem() { /* ... no change ... */ return { target: 0, refs:[], options: [] };}
-        function renderAngleProblem({ target, refs, options }) { /* ... no change ... */}
-        function showTimedAngle(duration, message, renderFn) { /* ... no change ... */}
-        function createAngleDiv(angle, size, isTarget) { /* ... no change ... */ return ''; }
-        
-        // --- Area Mode ---
+        function generateLengthProblem() {
+            const numbers = new Set();
+            const target  = Math.floor(Math.random() * 20) + 1;
+            correctAnswer = target;
+            numbers.add(target);
+            // [FIX #7] Set을 사용하므로 target과 동일한 값은 자동 제외됨
+            while (numbers.size < 3) {
+                numbers.add(Math.floor(Math.random() * 20) + 1);
+            }
+            numbers.delete(target);
+            return { target, refs: Array.from(numbers).sort((a, b) => a - b) };
+        }
+
+        function renderLengthProblem({ target, refs }) {
+            const maxValue = Math.max(target, ...refs);
+            problemDisplay.innerHTML  = '';
+            referenceDisplay.innerHTML = '';
+            problemDisplay.className  = 'relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex items-end justify-center gap-4 p-4 overflow-hidden';
+            referenceDisplay.style.display = 'flex';
+
+            if (currentQuestionNumber <= 3) {
+                renderLengthStage1({ target, refs, maxValue });
+                referenceDisplay.style.display = 'none';
+            } else {
+                const maxBarPixelHeight = referenceDisplay.clientHeight - 40;
+                const scale = maxBarPixelHeight > 0 ? maxBarPixelHeight / maxValue : 1;
+                problemDisplay.innerHTML = `
+                    <div class="h-full flex flex-col justify-end items-center">
+                        <p class="text-2xl font-bold text-indigo-600 mb-1">?</p>
+                        <div class="bg-indigo-400 rounded" style="width:50px; height:${target * scale}px;"></div>
+                    </div>`;
+                if (currentQuestionNumber <= 6) renderLengthStage2({ refs, scale });
+                else renderLengthStage3({ refs, scale }, currentQuestionNumber === 10);
+            }
+        }
+
+        function renderLengthStage1({ target, refs, maxValue }) {
+            problemDisplay.className = 'relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex flex-col items-stretch justify-around p-6 overflow-hidden';
+            const items = [
+                { value: target,  isTarget: true  },
+                { value: refs[0], isTarget: false },
+                { value: refs[1], isTarget: false },
+            ].sort(() => Math.random() - 0.5);
+            const maxBarPixelWidth = problemDisplay.clientWidth - 120;
+            const scale = maxBarPixelWidth > 0 ? maxBarPixelWidth / maxValue : 1;
+            problemDisplay.innerHTML = items.map(item => {
+                const label = item.isTarget ? '?' : `${item.value} cm`;
+                const color = item.isTarget ? 'bg-indigo-400' : 'bg-gray-400';
+                return `<div class="flex items-center gap-2">
+                            <p class="w-16 text-lg font-bold text-right">${label}</p>
+                            <div class="${color} rounded" style="height:40px; width:${item.value * scale}px;"></div>
+                        </div>`;
+            }).join('');
+        }
+
+        function renderLengthStage2({ refs, scale }) {
+            referenceDisplay.innerHTML = refs.map(ref =>
+                `<div class="h-full flex flex-col justify-end items-center">
+                    <p class="text-lg font-bold text-gray-700 mb-1">${ref} cm</p>
+                    <div class="bg-gray-400 rounded" style="width:50px; height:${ref * scale}px;"></div>
+                </div>`
+            ).join('');
+        }
+
+        function renderLengthStage3({ refs, scale }, isBonus) {
+            const duration      = isBonus ? '1.5s' : '5s';
+            const animationName = isBonus ? 'fly-by-fast' : 'fly-by-slow';
+            referenceDisplay.innerHTML = refs.map((ref, i) =>
+                `<div class="flying-object flex flex-col items-center"
+                      style="animation-name:${animationName}; animation-duration:${duration}; animation-delay:${i * 1.5}s;">
+                    <p class="text-lg font-bold text-gray-700 mb-1">${ref} cm</p>
+                    <div class="bg-gray-400 rounded" style="width:50px; height:${ref * scale}px;"></div>
+                </div>`
+            ).join('');
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // ∠ 각도 모드
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        function generateAngleProblem() {
+            const target = (Math.floor(Math.random() * 11) + 1) * 15; // 15° ~ 165°
+            correctAnswer = target;
+            const options = new Set([target]);
+            while (options.size < 10) {
+                options.add((Math.floor(Math.random() * 11) + 1) * 15);
+            }
+            return { target, refs: [45, 90, 135], options: Array.from(options).sort((a, b) => a - b) };
+        }
+
+        function renderAngleProblem({ target, refs, options }) {
+            problemDisplay.innerHTML = '';
+            referenceDisplay.innerHTML = '';
+            multipleChoiceOptions.innerHTML = '';
+            referenceDisplay.style.display = 'none';
+            answerSection.classList.remove('hidden');
+            problemDisplay.className = 'relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex items-center justify-center gap-4 p-4 overflow-hidden';
+
+            const renderProblemAngle = () => {
+                problemDisplay.innerHTML = createAngleDiv(target, 120, true);
+            };
+
+            if (currentQuestionNumber <= 4) {
+                // 참고 각도 표시
+                problemDisplay.className = 'relative w-full h-48 bg-gray-50 rounded-lg mb-4 border flex items-center justify-center gap-4 p-4 overflow-hidden';
+                referenceDisplay.style.display = 'flex';
+                referenceDisplay.className = 'relative flex justify-center items-center gap-4 h-32 mb-4 p-2 bg-gray-50 rounded-lg border';
+                referenceDisplay.innerHTML = refs.map(ref => createAngleDiv(ref, 60, false)).join('');
+                renderProblemAngle();
+            } else if (currentQuestionNumber <= 8) {
+                renderProblemAngle();
+            } else if (currentQuestionNumber === 9) {
+                // [FIX #5] 메시지: "잠시 뒤 각도가 1초 동안 보입니다"
+                showTimedAngle(1000, '준비되면 각도가 1초 동안 보입니다!', renderProblemAngle);
+            } else if (currentQuestionNumber === 10) {
+                showTimedAngle(500, '준비되면 각도가 0.5초 동안 보입니다!', renderProblemAngle);
+            }
+
+            // 객관식 버튼 생성
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'bg-gray-200 hover:bg-indigo-200 text-gray-800 font-bold py-2 px-4 rounded-lg transition';
+                button.textContent  = `${option}°`;
+                button.dataset.value = option;
+                multipleChoiceOptions.appendChild(button);
+            });
+        }
+
+        // [FIX #5] 타이머 메시지 명확화
+        function showTimedAngle(duration, message, renderFn) {
+            answerSection.classList.add('hidden');
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                renderFn();
+                answerSection.classList.remove('hidden');
+                setTimeout(() => {
+                    problemDisplay.innerHTML = '<p class="text-2xl text-gray-400">사라짐!</p>';
+                }, duration);
+            }, 2000);
+        }
+
+        function createAngleDiv(angle, size, isTarget) {
+            const label     = isTarget ? '?' : `${angle}°`;
+            const color     = isTarget ? 'bg-indigo-500' : 'bg-gray-500';
+            const textColor = isTarget ? 'text-indigo-600' : 'text-gray-700';
+            return `<div class="flex flex-col items-center justify-center p-2">
+                        <div class="relative" style="width:${size}px; height:${size}px;">
+                            <div class="absolute top-1/2 left-0 w-1/2 h-1 bg-gray-500" style="transform-origin:right center;"></div>
+                            <div class="absolute top-1/2 left-0 w-1/2 h-1 ${color}" style="transform:rotate(${-angle}deg); transform-origin:right center;"></div>
+                        </div>
+                        <p class="mt-2 text-lg font-bold ${textColor}">${label}</p>
+                    </div>`;
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // 📐 넓이 모드
+        // ═══════════════════════════════════════════════════════════════════════════
+
+        // [FIX #6] reverse() 원본 배열 변경 방지
         function findFactors(num) {
             if (num === 0) return [0, 0];
             let bestFactors = [1, num];
             for (let i = Math.floor(Math.sqrt(num)); i >= 1; i--) {
                 if (num % i === 0) {
-                    bestFactors = [i, num / i]; // [width, height]
+                    bestFactors = [i, num / i];
                     break;
                 }
             }
-            if (Math.random() > 0.5) {
-                return bestFactors.reverse();
-            }
-            return bestFactors;
+            // 원본을 복사한 뒤 reverse() 적용
+            return Math.random() > 0.5 ? [bestFactors[1], bestFactors[0]] : bestFactors;
         }
 
         function generateAreaProblem() {
             let options = null;
-            if (currentQuestionNumber <= 8) { // Questions 1-8 are multiple choice
+            if (currentQuestionNumber <= 8) {
                 options = new Set();
             }
 
-            if (currentQuestionNumber <= 5) { // Stage 1: Perfect Squares (Multiple Choice)
+            if (currentQuestionNumber <= 5) {
+                // Stage 1: 완전제곱수 (객관식)
                 const perfectSquares = [1, 4, 9, 16, 25, 36, 49, 64, 81, 100];
                 const numbers = new Set();
-                const targetIndex = Math.floor(Math.random() * perfectSquares.length);
-                const target = perfectSquares[targetIndex];
+                const target  = perfectSquares[Math.floor(Math.random() * perfectSquares.length)];
                 correctAnswer = target;
                 numbers.add(target);
                 options.add(target);
 
-                while (numbers.size < 3) { // For reference shapes
-                    const refIndex = Math.floor(Math.random() * perfectSquares.length);
-                    numbers.add(perfectSquares[refIndex]);
+                while (numbers.size < 3) {
+                    numbers.add(perfectSquares[Math.floor(Math.random() * perfectSquares.length)]);
                 }
-                
-                while (options.size < 6) { // For multiple choice options
-                    const optionIndex = Math.floor(Math.random() * perfectSquares.length);
-                    options.add(perfectSquares[optionIndex]);
+                while (options.size < 6) {
+                    options.add(perfectSquares[Math.floor(Math.random() * perfectSquares.length)]);
                 }
                 numbers.delete(target);
-                return { target, refs: Array.from(numbers), shape: 'square', options: Array.from(options).sort((a,b)=>a-b) };
+                return { target, refs: Array.from(numbers), shape: 'square', options: Array.from(options).sort((a, b) => a - b) };
 
-            } else { // Stage 2: Rectangles (Questions 6-10)
-                const numbers = new Set();
-                
-                // Function to create areas from factors that aren't too skewed (avoiding "needle" shapes)
+            } else {
+                // Stage 2: 직사각형 (6-8번 객관식 / 9-10번 자유입력)
                 const createGoodRectangleArea = () => {
-                    const factor1 = Math.floor(Math.random() * 9) + 2; // 2 to 10
-                    const factor2 = Math.floor(Math.random() * 9) + 2; // 2 to 10
-                    return factor1 * factor2;
+                    const f1 = Math.floor(Math.random() * 9) + 2; // 2~10
+                    const f2 = Math.floor(Math.random() * 9) + 2;
+                    return f1 * f2;
                 };
 
-                let target = createGoodRectangleArea();
-                
+                const numbers = new Set();
+                const target  = createGoodRectangleArea();
                 correctAnswer = target;
                 numbers.add(target);
-                if (options) options.add(target); // For questions 6-8
+                if (options) options.add(target);
 
-                while (numbers.size < 3) { // Generate reference numbers
+                while (numbers.size < 3) {
                     numbers.add(createGoodRectangleArea());
                 }
-                
-                if (options) { // For questions 6-8 (Multiple Choice)
+
+                // [FIX #3] 무한루프 방지: 최대 시도 횟수 제한
+                if (options) {
+                    let attempts = 0;
+                    const maxAttempts = 200;
+                    while (options.size < 6 && attempts < maxAttempts) {
+                        // target ±15 범위에서 다양한 옵션 생성
+                        const offset = Math.floor(Math.random() * 31) - 15;
+                        const option = Math.max(4, target + offset);
+                        options.add(option);
+                        attempts++;
+                    }
+                    // 그래도 부족하면 인접한 값으로 강제 채움
+                    let extra = 4;
                     while (options.size < 6) {
-                        const option = Math.max(1, target + Math.floor(Math.random() * 21) - 10); // Options near target
-                        if (option > 0) options.add(option);
+                        options.add(target + extra);
+                        extra += 2;
                     }
                 }
+
                 numbers.delete(target);
-                return { target, refs: Array.from(numbers), shape: 'rectangle', options: options ? Array.from(options).sort((a,b)=>a-b) : null };
+                return {
+                    target,
+                    refs: Array.from(numbers),
+                    shape: 'rectangle',
+                    options: options ? Array.from(options).sort((a, b) => a - b) : null,
+                };
             }
         }
 
@@ -260,39 +492,39 @@
             const allAreas = [target, ...refs];
             let maxDimension = 0;
             allAreas.forEach(area => {
-                const dims = (shape === 'square') ? [Math.sqrt(area), Math.sqrt(area)] : findFactors(area);
+                const dims = (shape === 'square')
+                    ? [Math.sqrt(area), Math.sqrt(area)]
+                    : findFactors(area);
                 maxDimension = Math.max(maxDimension, dims[0], dims[1]);
             });
 
-            // --- UNIFIED SCALING LOGIC (FIXED) ---
-            const problemHeight = problemDisplay.clientHeight;
+            const problemHeight   = problemDisplay.clientHeight;
             const referenceHeight = referenceDisplay.clientHeight;
-            const scaleForProblem = problemHeight > 40 && maxDimension > 0 ? (problemHeight - 40) / maxDimension : 1;
+            const scaleForProblem   = problemHeight   > 40 && maxDimension > 0 ? (problemHeight   - 40) / maxDimension : 1;
             const scaleForReference = referenceHeight > 40 && maxDimension > 0 ? (referenceHeight - 40) / maxDimension : 1;
             const scale = Math.min(scaleForProblem, scaleForReference);
-            // --- END UNIFIED SCALING LOGIC ---
 
             problemDisplay.innerHTML = createAreaShape(target, scale, true, shape);
-            referenceDisplay.className = "relative flex justify-center items-center gap-4 h-48 mb-4 p-2 bg-gray-50 rounded-lg border";
+            referenceDisplay.className = 'relative flex justify-center items-center gap-4 h-48 mb-4 p-2 bg-gray-50 rounded-lg border';
             referenceDisplay.innerHTML = refs.map(ref => createAreaShape(ref, scale, false, shape)).join('');
-            
+
             multipleChoiceOptions.innerHTML = '';
-            if (options) { // Questions 1-8 (Multiple Choice)
+            if (options) {
                 inputAnswerArea.classList.add('hidden');
                 multipleChoiceOptions.classList.remove('hidden');
                 options.forEach(option => {
                     const button = document.createElement('button');
-                    button.className = "bg-gray-200 hover:bg-indigo-200 text-gray-800 font-bold py-2 px-4 rounded-lg transition";
-                    button.textContent = `${option} cm²`;
+                    button.className     = 'bg-gray-200 hover:bg-indigo-200 text-gray-800 font-bold py-2 px-4 rounded-lg transition';
+                    button.textContent   = `${option} cm²`;
                     button.dataset.value = option;
                     multipleChoiceOptions.appendChild(button);
                 });
-            } else { // Questions 9-10 (Free Response)
+            } else {
                 inputAnswerArea.classList.remove('hidden');
                 multipleChoiceOptions.classList.add('hidden');
             }
         }
-        
+
         function createAreaShape(area, scale, isTarget, shape) {
             let width, height;
             if (shape === 'square') {
@@ -302,68 +534,238 @@
                 const factors = findFactors(area);
                 width = factors[0]; height = factors[1];
             }
-
-            const scaledWidth = width * scale;
+            const scaledWidth  = width  * scale;
             const scaledHeight = height * scale;
-            const label = isTarget ? '?' : `${area} cm²`;
-            const color = isTarget ? 'bg-orange-400' : 'bg-gray-400';
+            const label     = isTarget ? '?' : `${area} cm²`;
+            const color     = isTarget ? 'bg-orange-400' : 'bg-gray-400';
             const textColor = isTarget ? 'text-orange-600' : 'text-gray-700';
-
             return `<div class="flex flex-col items-center justify-center">
                         <div class="${color} flex items-center justify-center rounded" style="width:${scaledWidth}px; height:${scaledHeight}px;">
-                           ${isTarget ? `<span class="text-4xl font-bold text-white">?</span>` : ''}
+                            ${isTarget ? '<span class="text-4xl font-bold text-white">?</span>' : ''}
                         </div>
                         <p class="mt-2 text-lg font-bold ${textColor}">${label}</p>
                     </div>`;
         }
 
+        // ═══════════════════════════════════════════════════════════════════════════
+        // 핵심 게임 로직
+        // ═══════════════════════════════════════════════════════════════════════════
 
-        // --- Core Game Logic ---
+        // [FIX #1] 부분 점수 시스템: 첫 시도=3점, 두 번째=2점, 세 번째=1점
+        // [FIX #2] 객관식 모드에서는 UP/DOWN 힌트 대신 간단한 오답 메시지 표시
         function handleGuess(guess, targetButton = null) {
             if (guess === correctAnswer) {
-                if (remainingChances === 3) score++;
-                feedbackMessage.textContent = '🎉 정답입니다! 🎉';
-                feedbackMessage.className += ' text-green-500 feedback-correct';
+                // 남은 기회 = 현재 시도 시점의 기회 수 → 그게 점수
+                score += remainingChances;
+                correctCount++;
+
+                const perfectMsg = remainingChances === 3 ? '🎉 완벽해요! 첫 번째 정답! 🎉' : '🎉 정답입니다! 🎉';
+                feedbackMessage.textContent = perfectMsg;
+                feedbackMessage.className  += ' text-green-500 feedback-correct';
                 correctAnswerEl.textContent = `정답은 ${correctAnswer}${unitLabel.textContent} 입니다.`;
                 showResultAndNextButton();
                 return;
             }
 
             remainingChances--;
-            if(targetButton) {
+
+            // 객관식 버튼 비활성화
+            if (targetButton) {
                 targetButton.disabled = true;
                 targetButton.classList.remove('hover:bg-indigo-200');
                 targetButton.classList.add('bg-red-200', 'cursor-not-allowed');
             }
-            if(guessInput) guessInput.value = '';
+            guessInput.value = '';
 
             if (remainingChances > 0) {
-                const hint = guess > correctAnswer ? '조금 더 작아요! (DOWN) 🤔' : '조금 더 커요! (UP) 🤔';
-                feedbackHint.textContent = hint;
-                feedbackHint.className = 'text-xl font-bold text-red-500 feedback-wrong';
-                chancesLeft.textContent = `${remainingChances}번의 기회가 남았습니다.`;
+                // [FIX #2] 객관식 여부 판별
+                const isMultipleChoice = !multipleChoiceOptions.classList.contains('hidden')
+                                      && multipleChoiceOptions.children.length > 0;
+                let hint;
+                if (isMultipleChoice) {
+                    hint = '틀렸어요! 다시 골라보세요. 🤔';
+                } else {
+                    hint = guess > correctAnswer ? '조금 더 작아요! (DOWN) 🤔' : '조금 더 커요! (UP) 🤔';
+                }
+                feedbackHint.textContent  = hint;
+                feedbackHint.className    = 'text-xl font-bold text-red-500 feedback-wrong';
+                chancesLeft.textContent   = `${remainingChances}번의 기회가 남았습니다.`;
                 setTimeout(() => { feedbackHint.className = 'text-xl font-bold text-red-500'; }, 500);
             } else {
                 feedbackMessage.textContent = '아쉽네요! 기회를 모두 사용했어요.';
-                feedbackMessage.className += ' text-red-500';
+                feedbackMessage.className  += ' text-red-500';
                 correctAnswerEl.textContent = `정답은 ${correctAnswer}${unitLabel.textContent} 입니다.`;
                 showResultAndNextButton();
             }
         }
-        
-        function showResultAndNextButton() { /* ... no change ... */ }
-        function showEndScreen() { /* ... no change ... */ }
 
-        // --- Event Listeners ---
-        document.querySelectorAll('.game-mode-btn').forEach(btn => btn.addEventListener('click', () => startGame(btn.dataset.mode)));
-        
+        function showResultAndNextButton() {
+            answerSection.classList.add('hidden');
+            resultSection.classList.remove('hidden');
+        }
+
+        function showEndScreen() {
+            gameScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            body.className = 'bg-gray-100 flex items-center justify-center min-h-screen';
+
+            const maxScore = totalQuestions * 3;
+            const pct = score / maxScore;
+            let gradeEmoji, gradeText;
+            if      (pct >= 0.9) { gradeEmoji = '🌟🌟🌟'; gradeText = '완벽!'; }
+            else if (pct >= 0.7) { gradeEmoji = '⭐⭐';   gradeText = '우수!'; }
+            else if (pct >= 0.5) { gradeEmoji = '⭐';     gradeText = '좋아요!'; }
+            else                 { gradeEmoji = '💪';     gradeText = '도전!'; }
+
+            document.getElementById('final-grade').textContent   = gradeEmoji;
+            finalScoreEl.textContent   = `${score} / ${maxScore}점  (${gradeText})`;
+            finalCorrectEl.textContent = `정답 수: ${correctCount} / ${totalQuestions} 문제`;
+        }
+
+        // ─── 증거 JPG 생성 및 다운로드 ───────────────────────────────────────────
+        async function generateCertificate() {
+            // Noto Sans KR 폰트 로드 대기
+            try { await document.fonts.load('bold 32px "Noto Sans KR"'); } catch(e) {}
+
+            const W = 900, H = 560;
+            const canvas = document.createElement('canvas');
+            canvas.width = W; canvas.height = H;
+            const ctx = canvas.getContext('2d');
+
+            // ── 배경 그라디언트 ──
+            const modeColors = { length: ['#1d4ed8','#3b82f6'], angle: ['#15803d','#22c55e'], area: ['#c2410c','#f97316'] };
+            const [c1, c2] = modeColors[currentMode] || ['#4f46e5','#7c3aed'];
+            const bgGrad = ctx.createLinearGradient(0, 0, W, H);
+            bgGrad.addColorStop(0, c1);
+            bgGrad.addColorStop(1, c2);
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, W, H);
+
+            // ── 반투명 도트 패턴 ──
+            ctx.fillStyle = 'rgba(255,255,255,0.08)';
+            for (let x = 20; x < W; x += 38) {
+                for (let y = 20; y < H; y += 38) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // ── 흰색 카드 (둥근 직사각형) ──
+            const cx = 45, cy = 45, cw = W - 90, ch = H - 90, r = 24;
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = 'rgba(0,0,0,0.25)';
+            ctx.shadowBlur  = 24;
+            ctx.shadowOffsetY = 6;
+            drawRoundRect(ctx, cx, cy, cw, ch, r);
+            ctx.fill();
+            ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+
+            // ── 컬러 헤더 바 ──
+            ctx.fillStyle = c1;
+            ctx.beginPath();
+            ctx.moveTo(cx + r, cy);
+            ctx.lineTo(cx + cw - r, cy);
+            ctx.arcTo(cx + cw, cy, cx + cw, cy + r, r);
+            ctx.lineTo(cx + cw, cy + 76);
+            ctx.lineTo(cx, cy + 76);
+            ctx.lineTo(cx, cy + r);
+            ctx.arcTo(cx, cy, cx + r, cy, r);
+            ctx.closePath();
+            ctx.fill();
+
+            // ── 헤더 타이틀 ──
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 26px "Noto Sans KR", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('수학 양감 어림 게임  |  완료 증명서', W / 2, cy + 38);
+
+            // ── 모드명 ──
+            const modeNames = { length: '📏 길이 어림하기', angle: '∠ 각도 어림하기', area: '📐 넓이 어림하기' };
+            ctx.fillStyle = c1;
+            ctx.font = 'bold 32px "Noto Sans KR", sans-serif';
+            ctx.fillText(modeNames[currentMode], W / 2, cy + 130);
+
+            // ── 등급 이모지 ──
+            const maxScore = totalQuestions * 3;
+            const pct = score / maxScore;
+            let gradeEmoji, gradeText;
+            if      (pct >= 0.9) { gradeEmoji = '★★★'; gradeText = '완벽!'; }
+            else if (pct >= 0.7) { gradeEmoji = '★★';  gradeText = '우수!'; }
+            else if (pct >= 0.5) { gradeEmoji = '★';   gradeText = '좋아요!'; }
+            else                 { gradeEmoji = '◆';   gradeText = '도전!'; }
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 38px sans-serif';
+            ctx.fillText(gradeEmoji, W / 2, cy + 192);
+
+            // ── 점수 (큰 글씨) ──
+            ctx.fillStyle = '#111827';
+            ctx.font = 'bold 64px "Noto Sans KR", sans-serif';
+            ctx.fillText(`${score}점`, W / 2, cy + 268);
+
+            ctx.fillStyle = '#6b7280';
+            ctx.font = '22px "Noto Sans KR", sans-serif';
+            ctx.fillText(`( 만점 ${maxScore}점 )`, W / 2, cy + 305);
+
+            // ── 정답 수 및 등급 ──
+            ctx.fillStyle = '#374151';
+            ctx.font = '24px "Noto Sans KR", sans-serif';
+            ctx.fillText(`정답  ${correctCount} / ${totalQuestions} 문제  ·  ${gradeText}`, W / 2, cy + 350);
+
+            // ── 구분선 ──
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(cx + 60, cy + 380);
+            ctx.lineTo(cx + cw - 60, cy + 380);
+            ctx.stroke();
+
+            // ── 타임스탬프 ──
+            const now = new Date();
+            const pad  = n => String(n).padStart(2, '0');
+            const ts   = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}  ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = '17px monospace';
+            ctx.fillText(`완료 시각:  ${ts}`, W / 2, cy + 415);
+
+            // ── 다운로드 ──
+            const safeTs = ts.replace(/[\s:]/g, '-');
+            const link = document.createElement('a');
+            link.download = `수학양감_${currentMode}_${safeTs}.jpg`;
+            link.href     = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+        }
+
+        function drawRoundRect(ctx, x, y, w, h, r) {
+            ctx.beginPath();
+            ctx.moveTo(x + r, y);
+            ctx.lineTo(x + w - r, y);
+            ctx.arcTo(x + w, y,     x + w, y + r,     r);
+            ctx.lineTo(x + w, y + h - r);
+            ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+            ctx.lineTo(x + r, y + h);
+            ctx.arcTo(x,     y + h, x,     y + h - r, r);
+            ctx.lineTo(x,     y + r);
+            ctx.arcTo(x,     y,     x + r, y,         r);
+            ctx.closePath();
+        }
+
+        // ─── 이벤트 리스너 ────────────────────────────────────────────────────────
+        document.querySelectorAll('.game-mode-btn').forEach(btn =>
+            btn.addEventListener('click', () => startGame(btn.dataset.mode))
+        );
+
+        document.getElementById('download-cert-btn').addEventListener('click', generateCertificate);
+
         document.getElementById('back-to-menu').addEventListener('click', () => {
             gameScreen.classList.add('hidden');
             endScreen.classList.add('hidden');
             menuScreen.classList.remove('hidden');
             body.className = 'bg-gray-100 flex items-center justify-center min-h-screen';
         });
-        
+
         playAgainBtn.addEventListener('click', () => {
             endScreen.classList.add('hidden');
             menuScreen.classList.remove('hidden');
@@ -371,37 +773,28 @@
         });
 
         submitGuessBtn.addEventListener('click', () => {
-             const userGuess = parseInt(guessInput.value, 10);
-             if (!isNaN(userGuess) && userGuess > 0) handleGuess(userGuess);
+            const userGuess = parseInt(guessInput.value, 10);
+            if (!isNaN(userGuess) && userGuess > 0) handleGuess(userGuess);
         });
+
         guessInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const userGuess = parseInt(guessInput.value, 10);
                 if (!isNaN(userGuess) && userGuess > 0) handleGuess(userGuess);
             }
         });
+
         multipleChoiceOptions.addEventListener('click', (e) => {
-            if(e.target.tagName === 'BUTTON') {
+            if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
                 const userGuess = parseInt(e.target.dataset.value, 10);
                 handleGuess(userGuess, e.target);
             }
         });
-        nextProblemBtn.addEventListener('click', () => { currentQuestionNumber++; loadNextProblem(); });
 
-        // --- Helper functions for brevity ---
-        // (Copied from previous versions to keep the file complete)
-        generateLengthProblem = function() { const numbers = new Set(); const target = Math.floor(Math.random() * 20) + 1; correctAnswer = target; numbers.add(target); while (numbers.size < 3) { numbers.add(Math.floor(Math.random() * 20) + 1); } numbers.delete(target); return { target, refs: Array.from(numbers).sort((a,b) => a-b) }; }
-        renderLengthProblem = function({ target, refs }) { const maxValue = Math.max(target, ...refs); problemDisplay.innerHTML = ''; referenceDisplay.innerHTML = ''; problemDisplay.className = 'relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex items-end justify-center gap-4 p-4 overflow-hidden'; referenceDisplay.style.display = 'flex'; if (currentQuestionNumber <= 3) { renderLengthStage1({ target, refs, maxValue }); referenceDisplay.style.display = 'none'; } else { const maxBarPixelHeight = referenceDisplay.clientHeight - 40; const scale = maxBarPixelHeight > 0 ? maxBarPixelHeight / maxValue : 1; problemDisplay.innerHTML = `<div class="h-full flex flex-col justify-end items-center"><p class="text-2xl font-bold text-indigo-600 mb-1">?</p><div class="bg-indigo-400 rounded" style="width: 50px; height: ${target * scale}px;"></div></div>`; if (currentQuestionNumber <= 6) renderLengthStage2({ refs, scale }); else renderLengthStage3({ refs, scale }, currentQuestionNumber === 10); } }
-        renderLengthStage1 = function({ target, refs, maxValue }) { problemDisplay.className = 'relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex flex-col items-stretch justify-around p-6 overflow-hidden'; let items = [ { value: target, isTarget: true }, { value: refs[0], isTarget: false }, { value: refs[1], isTarget: false } ].sort(() => Math.random() - 0.5); const maxBarPixelWidth = problemDisplay.clientWidth - 120; const scale = maxBarPixelWidth > 0 ? maxBarPixelWidth / maxValue : 1; problemDisplay.innerHTML = items.map(item => { const label = item.isTarget ? '?' : `${item.value} cm`; const color = item.isTarget ? 'bg-indigo-400' : 'bg-gray-400'; return `<div class="flex items-center gap-2"><p class="w-16 text-lg font-bold text-right">${label}</p><div class="${color} rounded" style="height: 40px; width: ${item.value * scale}px;"></div></div>`; }).join(''); }
-        renderLengthStage2 = function({ refs, scale }) { referenceDisplay.innerHTML = refs.map(ref => `<div class="h-full flex flex-col justify-end items-center"><p class="text-lg font-bold text-gray-700 mb-1">${ref} cm</p><div class="bg-gray-400 rounded" style="width: 50px; height: ${ref * scale}px;"></div></div>`).join(''); }
-        renderLengthStage3 = function({ refs, scale }, isBonus) { const duration = isBonus ? '1.5s' : '5s'; const animationName = isBonus ? 'fly-by-fast' : 'fly-by-slow'; referenceDisplay.innerHTML = refs.map((ref, i) => `<div class="flying-object flex flex-col items-center" style="animation-name:${animationName}; animation-duration:${duration}; animation-delay:${i * 1.5}s;"><p class="text-lg font-bold text-gray-700 mb-1">${ref} cm</p><div class="bg-gray-400 rounded" style="width: 50px; height: ${ref * scale}px;"></div></div>`).join(''); }
-        generateAngleProblem = function() { const target = (Math.floor(Math.random() * 11) + 1) * 15; correctAnswer = target; const options = new Set([target]); while (options.size < 10) { const option = (Math.floor(Math.random() * 11) + 1) * 15; options.add(option); } return { target, refs: [45, 90, 135], options: Array.from(options).sort((a, b) => a - b) }; }
-        renderAngleProblem = function({ target, refs, options }) { problemDisplay.innerHTML = ''; referenceDisplay.innerHTML = ''; multipleChoiceOptions.innerHTML = ''; referenceDisplay.style.display = 'none'; answerSection.classList.remove('hidden'); problemDisplay.className = 'relative w-full h-64 md:h-80 bg-gray-50 rounded-lg mb-4 border flex items-center justify-center gap-4 p-4 overflow-hidden'; const renderProblemAngle = () => problemDisplay.innerHTML = createAngleDiv(target, 120, true); if (currentQuestionNumber <= 4) { problemDisplay.className = 'relative w-full h-48 bg-gray-50 rounded-lg mb-4 border flex items-center justify-center gap-4 p-4 overflow-hidden'; referenceDisplay.style.display = 'flex'; referenceDisplay.className = "relative flex justify-center items-center gap-4 h-32 mb-4 p-2 bg-gray-50 rounded-lg border"; referenceDisplay.innerHTML = refs.map(ref => createAngleDiv(ref, 60, false)).join(''); renderProblemAngle(); } else if (currentQuestionNumber <= 8) { renderProblemAngle(); } else if (currentQuestionNumber === 9) { showTimedAngle(1000, "1초 후 사라집니다.", renderProblemAngle); } else if (currentQuestionNumber === 10) { showTimedAngle(500, "0.5초 후 사라집니다.", renderProblemAngle); } options.forEach(option => { const button = document.createElement('button'); button.className = "bg-gray-200 hover:bg-indigo-200 text-gray-800 font-bold py-2 px-4 rounded-lg transition"; button.textContent = `${option}°`; button.dataset.value = option; multipleChoiceOptions.appendChild(button); }); }
-        showTimedAngle = function(duration, message, renderFn) { answerSection.classList.add('hidden'); modalMessage.textContent = message; modal.classList.remove('hidden'); setTimeout(() => { modal.classList.add('hidden'); renderFn(); answerSection.classList.remove('hidden'); setTimeout(() => { problemDisplay.innerHTML = '<p class="text-2xl text-gray-400">사라짐!</p>'; }, duration); }, 2000); }
-        createAngleDiv = function(angle, size, isTarget) { const label = isTarget ? '?' : `${angle}°`; const color = isTarget ? 'bg-indigo-500' : 'bg-gray-500'; const textColor = isTarget ? 'text-indigo-600' : 'text-gray-700'; return `<div class="flex flex-col items-center justify-center p-2"><div class="relative" style="width: ${size}px; height: ${size}px;"><div class="absolute top-1/2 left-0 w-1/2 h-1 bg-gray-500" style="transform-origin: right center;"></div><div class="absolute top-1/2 left-0 w-1/2 h-1 ${color}" style="transform: rotate(${-angle}deg); transform-origin: right center;"></div></div><p class="mt-2 text-lg font-bold ${textColor}">${label}</p></div>`; }
-        showResultAndNextButton = function() { answerSection.classList.add('hidden'); resultSection.classList.remove('hidden'); }
-        showEndScreen = function() { gameScreen.classList.add('hidden'); endScreen.classList.remove('hidden'); body.className = 'bg-gray-100 flex items-center justify-center min-h-screen'; finalScoreEl.textContent = `첫 시도 정답: ${score} / ${totalQuestions} 문제`; }
-        updateBackground = function() { body.classList.remove('bg-stage-1', 'bg-stage-2', 'bg-stage-3', 'bg-stage-bonus', 'bg-gray-100'); if (currentMode !== 'length') { body.classList.add('bg-gray-100'); return; } if (currentQuestionNumber <= 3) body.classList.add('bg-stage-1'); else if (currentQuestionNumber <= 6) body.classList.add('bg-stage-2'); else if (currentQuestionNumber <= 9) body.classList.add('bg-stage-3'); else if (currentQuestionNumber === 10) body.classList.add('bg-stage-bonus'); }
+        nextProblemBtn.addEventListener('click', () => {
+            currentQuestionNumber++;
+            loadNextProblem();
+        });
     </script>
 </body>
 </html>
